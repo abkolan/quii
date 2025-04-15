@@ -40,7 +40,7 @@ func TestAdd(t *testing.T) {
 		want := "this is just a test"
 
 		assertDefinition(t, dictionary, word, want)
-		assertNoError(t,err)
+		assertNoError(t, err)
 	})
 
 	t.Run("existing word", func(t *testing.T) {
@@ -48,63 +48,61 @@ func TestAdd(t *testing.T) {
 		testDefinition := "test definition"
 
 		dictionary := Dictionary{}
-		err:= dictionary.Add(testWord, testDefinition)
-		assertNoError(t,err)
+		err := dictionary.Add(testWord, testDefinition)
+		assertNoError(t, err)
 
 		err = dictionary.Add(testWord, "new definition")
 
 		assertError(t, err, ErrWordExists)
-		//assertDefinition(t, dictionary, testWord, testDefinition)
 
 	})
-
 }
 
-func TestUpdate (t *testing.T){
-	t.Run("existing word", func (t *testing.T){
-		word:="test"
-		defnt:= "test definition"
+func TestUpdate(t *testing.T) {
+	t.Run("existing word", func(t *testing.T) {
+		word := "test"
+		defnt := "test definition"
 		dictionary := Dictionary{}
-		dictionary.Add(word,defnt)
-	
+		dictionary.Add(word, defnt)
+
 		newDefns := "new definition"
-		dictionary.Update(word,newDefns)
-		assertDefinition(t, dictionary, word,newDefns)
+		dictionary.Update(word, newDefns)
+		assertDefinition(t, dictionary, word, newDefns)
 	})
 
-	t.Run("new word", func(t *testing.T){
+	t.Run("new word", func(t *testing.T) {
 		dictionary := Dictionary{}
 
-		word:="test word"
-		testDef :="test def"
+		word := "test word"
+		testDef := "test def"
 
-		err:=dictionary.Update(word,testDef)
-		assertError(t, err,ErrWordDoesNotExists)
+		err := dictionary.Update(word, testDef)
+		assertError(t, err, ErrWordDoesNotExists)
 	})
-	
+
 }
 
-func TestDelete (t *testing.T){
-	t.Run("existing word", func (t *testing.T){
-		word:="test word"
+func TestDelete(t *testing.T) {
+	t.Run("existing word", func(t *testing.T) {
+		word := "test word"
 		def := "test def"
 		dictionary := Dictionary{}
 
-		dictionary.Add(word,def)
+		dictionary.Add(word, def)
 
 		err := dictionary.Delete(word)
 
 		assertNoError(t, err)
-		_,err = dictionary.Search(word)
+		_, err = dictionary.Search(word)
 		assertError(t, err, ErrNotFound)
 
 	})
 
-	t.Run("non existing word", func (t *testing.T){
+	t.Run("non existing word", func(t *testing.T) {
 		dictionary := Dictionary{}
 
 		err := dictionary.Delete("test")
-		assertError(t,err,ErrWordDoesNotExists)
+		assertError(t, err, ErrWordDoesNotExists)
 	})
 }
 
