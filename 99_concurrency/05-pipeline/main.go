@@ -1,4 +1,4 @@
-package _99_05_pipeline
+package main
 
 import "fmt"
 
