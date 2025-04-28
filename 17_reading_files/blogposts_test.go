@@ -7,7 +7,7 @@ import (
 	"testing"
 	"testing/fstest"
 
-	blogposts "github.com/abkolan/quii/17-reading-files"
+	blogposts "github.com/abkolan/quii/17_reading_files"
 )
 
 type StubFailingFS struct {
