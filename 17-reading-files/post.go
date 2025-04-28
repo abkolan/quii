@@ -38,7 +38,19 @@ func newPost(postFile io.Reader) (Post, error) {
 	title := readline(titleSeparator)
 	description := readline(descriptionSeparator)
 	tags := strings.Split(readline(tagsSeparator), ", ")
+	body := readBody(scanner)
 
+	post := Post{
+		Title:       title,
+		Description: description,
+		Tags:        tags,
+		Body:        body,
+	}
+
+	return post, nil
+}
+
+func readBody(scanner *bufio.Scanner) string {
 	scanner.Scan() // skip the `---` line
 
 	// Read body till EOF
@@ -49,13 +61,5 @@ func newPost(postFile io.Reader) (Post, error) {
 
 	// Remove the trailing new line
 	body := strings.TrimSuffix(buf.String(), "\n")
-
-	post := Post{
-		Title:       title,
-		Description: description,
-		Tags:        tags,
-		Body:        body,
-	}
-
-	return post, nil
+	return body
 }
