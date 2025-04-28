@@ -2,17 +2,32 @@ package blogposts
 
 import (
 	"io/fs"
-	"testing/fstest"
 )
 
-type Post struct {
+func NewPostsFromFS(fileSystem fs.FS) ([]Post, error) {
+	dirEntries, err := fs.ReadDir(fileSystem, ".")
+	if err != nil {
+		return nil, err
+	}
+	var posts []Post
+	for _, f := range dirEntries {
+		post, err := getPost(fileSystem, f.Name())
+		if err != nil {
+
+		}
+		posts = append(posts, post)
+	}
+	return posts, nil
 }
 
-func NewPostsFromFS(fileSystem fstest.MapFS) []Post {
-	dirEntries, _ := fs.ReadDir(fileSystem, ".")
-	var posts []Post
-	for range dirEntries {
-		posts = append(posts, Post{})
+func getPost(fileSystem fs.FS, fileName string) (Post, error) {
+	//Open postFile
+	postFile, err := fileSystem.Open(fileName)
+
+	if err != nil {
+		return Post{}, err
 	}
-	return posts
+	defer postFile.Close()
+	return newPost(postFile)
+
 }
