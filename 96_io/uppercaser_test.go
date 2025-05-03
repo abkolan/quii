@@ -29,6 +29,7 @@ WORLD`,
 	}
 
 	for _, c := range cases {
+		c := c
 		t.Run(c.Description, func(t *testing.T) {
 			reader := strings.NewReader(c.Input)
 			buf := bytes.Buffer{}

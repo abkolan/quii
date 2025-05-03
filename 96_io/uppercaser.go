@@ -2,27 +2,30 @@ package upppercaser
 
 import (
 	"bufio"
-	"fmt"
+	"errors"
 	"io"
 	"strings"
 )
 
 func UpperCase(r io.Reader, w io.Writer) error {
-	scanner := bufio.NewScanner(r)
-	firstLine := true
-	for scanner.Scan() {
-		if !firstLine {
-			fmt.Fprintln(w)
-		} else {
-			firstLine = false
+	br := bufio.NewReader(r)
+	for {
+		line, err := br.ReadString('\n')
+		if len(line) > 0 {
+			if _, werr := w.Write([]byte(strings.ToUpper(line))); werr != nil {
+				return werr
+			}
 		}
-		line := scanner.Text()
-		_, err := fmt.Fprint(w, strings.ToUpper(line))
 		if err != nil {
+			if errors.Is(err, io.EOF) {
+				// clean
+				break
+			}
 			return err
 		}
+
 	}
-	return scanner.Err()
+	return nil
 }
 
 func CountBytes(r io.Reader) (int64, error) {
